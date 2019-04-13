@@ -63,7 +63,7 @@ open class EZSwipeController: UIViewController {
     public var titleButton: UIButton?
     open var currentStackVC: UIViewController!
     public var currentVCIndex: Int {
-        return stackPageVC.index(of: currentStackVC)!
+        return stackPageVC.firstIndex(of: currentStackVC)!
     }
     
     open weak var datasource: EZSwipeControllerDataSource?
@@ -218,7 +218,7 @@ open class EZSwipeController: UIViewController {
     }
     
     @objc public func leftButtonAction() {
-        let currentIndex = stackPageVC.index(of: currentStackVC)!
+        let currentIndex = stackPageVC.firstIndex(of: currentStackVC)!
         datasource?.clickedLeftButtonFromPageIndex?(currentIndex)
 
         let shouldDisableSwipe = datasource?.disableSwipingForLeftButtonAtPageIndex?(currentIndex) ?? false
@@ -237,7 +237,7 @@ open class EZSwipeController: UIViewController {
     }
 
     @objc public func rightButtonAction() {
-        let currentIndex = stackPageVC.index(of: currentStackVC)!
+        let currentIndex = stackPageVC.firstIndex(of: currentStackVC)!
         datasource?.clickedRightButtonFromPageIndex?(currentIndex)
 
         let shouldDisableSwipe = datasource?.disableSwipingForRightButtonAtPageIndex?(currentIndex) ?? false
@@ -257,7 +257,7 @@ open class EZSwipeController: UIViewController {
     }
     
     public func moveToPage(_ index: Int, animated: Bool) {
-        let currentIndex = stackPageVC.index(of: currentStackVC)!
+        let currentIndex = stackPageVC.firstIndex(of: currentStackVC)!
         
         var direction: UIPageViewController.NavigationDirection = .reverse
         
@@ -278,14 +278,14 @@ extension EZSwipeController: UIPageViewControllerDataSource {
         if viewController == stackPageVC.first {
             return nil
         }
-        return stackPageVC[stackPageVC.index(of: viewController)! - 1]
+        return stackPageVC[stackPageVC.firstIndex(of: viewController)! - 1]
     }
 
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         if viewController == stackPageVC.last {
             return nil
         }
-        return stackPageVC[stackPageVC.index(of: viewController)! + 1]
+        return stackPageVC[stackPageVC.firstIndex(of: viewController)! + 1]
     }
 }
 
@@ -296,7 +296,7 @@ extension EZSwipeController: UIPageViewControllerDelegate {
             return
         }
         
-        let newVCIndex = stackPageVC.index(of: pageViewController.viewControllers!.first!)!
+        let newVCIndex = stackPageVC.firstIndex(of: pageViewController.viewControllers!.first!)!
         
         datasource?.changedToPageIndex?(newVCIndex)
         
